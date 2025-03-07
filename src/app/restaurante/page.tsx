@@ -1,24 +1,36 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Star, Clock, DollarSign, Search, Heart, MapPin, Info } from 'lucide-react';
+import Image from 'next/image';
+import { Product, fetchProducts } from '../../../services/apiTest';
 
 const RestaurantView = () => {
-  const [selectedCategory, setSelectedCategory] = useState<keyof typeof menuItems>('Todos');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const menuItems = {
-    Todos: [1, 2, 3, 4, 5],
-    Principais: [1, 2, 3],
-    Bebidas: [4],
-    Sobremesas: [5]
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchProducts(); // Pega os pratos cadastrados na API
+      setProducts(data);
+    } catch (error) {
+      console.error("Erro ao carregar os produtos:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Busca os produtos assim que o componente é montado
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-50 text-black">
+    <div className="min-h-screen bg-gray-50">
       {/* Restaurant Hero */}
       <div className="relative h-[300px] md:h-[400px] bg-gray-300">
-        <div className="absolute inset-0 bg-black bg-opacity-30">
-          {/* Container centralizado */}
+        <div className="absolute inset-0 bg-opacity-30">
           <div className="max-w-6xl mx-auto h-full px-4">
             <div className="absolute bottom-0 left-0 right-0">
               <div className="max-w-6xl mx-auto">
@@ -84,7 +96,7 @@ const RestaurantView = () => {
             </div>
           </div>
 
-          {/* Menu Content */}
+          {/* Menu Content - Exibindo os pratos */}
           <div className="col-span-12 md:col-span-8 lg:col-span-9">
             {/* Search */}
             <div className="relative mb-6">
@@ -96,53 +108,51 @@ const RestaurantView = () => {
               <Search className="absolute left-4 top-3.5 text-gray-400" />
             </div>
 
-            {/* Categories */}
-            <div className="flex gap-4 mb-6 overflow-x-auto pb-2 scrollbar-hide">
-            {(['Todos', 'Principais', 'Bebidas', 'Sobremesas'] as const).map((category) => (
-            <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full whitespace-nowrap ${
-                selectedCategory === category
-                    ? 'bg-red-600 text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-100'
-                }`}
-            >
-                {category}
-            </button>
-            ))}
-
-            </div>
-
-            {/* Menu Items */}
-            <div className="grid gap-4">
-              {menuItems[selectedCategory].map((item) => (
-                <div key={item} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="w-full md:w-32 h-32 md:h-24 bg-gray-300 rounded-lg flex-shrink-0" />
-                    <div className="flex-1">
-                      <div className="flex flex-col md:flex-row justify-between items-start gap-2 mb-2">
-                        <div>
-                          <h3 className="font-semibold">Prato Especial {item}</h3>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Descrição deliciosa do prato com ingredientes especiais e temperos únicos.
-                          </p>
-                        </div>
-                        <span className="font-semibold text-lg md:text-base">R$ 45,90</span>
+            {/* Aqui os pratos serão exibidos */}
+            {loading ? (
+              <p>Carregando pratos...</p>
+            ) : products.length === 0 ? (
+              <p>Nenhum prato encontrado.</p>
+            ) : (
+              <div className="grid gap-4">
+                {products.map((product) => (
+                  <div key={product.id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <div className="w-full md:w-32 h-32 md:h-24 bg-gray-300 rounded-lg flex-shrink-0 relative">
+                        {product.image && (
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                          />
+                        )}
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
-                        <span className="flex items-center gap-1">
-                          <Clock size={16} />
-                          30 min
-                        </span>
-                        <span className="hidden md:inline">•</span>
-                        <span>Serve 2 pessoas</span>
+                      <div className="flex-1">
+                        <div className="flex flex-col md:flex-row justify-between items-start gap-2 mb-2">
+                          <div>
+                            <h3 className="font-semibold">{product.name}</h3>
+                            <p className="text-sm text-gray-600 mt-1">{product.description}</p>
+                          </div>
+                          <span className="font-semibold text-lg md:text-base">
+                            R$ {product.price.toFixed(2).replace('.', ',')}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
+                          <span className="flex items-center gap-1">
+                            <Clock size={16} />
+                            {product.prepTime}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span>{product.servings}</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -41,7 +41,7 @@ const HomePage = () => {
       </section>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 -mt-10 text-black">
+      <main className="container mx-auto px-4 -mt-10">
         {/* Categories */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <button className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex flex-col items-center gap-2">

@@ -1,13 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-// import Link from 'next/link';
 
 const AuthPage = () => {
   const [isRegister, setIsRegister] = useState(false);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 text-black">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center mb-6">
           {isRegister ? 'Criar Conta' : 'Entrar'}
