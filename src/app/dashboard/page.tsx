@@ -41,7 +41,7 @@ const RestaurantDashboard: React.FC = () => {
     };
   
     const response = await fetch('/api/restaurants', {
-      method: 'POST', // ou PUT se for para editar
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -49,15 +49,12 @@ const RestaurantDashboard: React.FC = () => {
     });
   
     if (response.ok) {
-      // Sucesso, você pode adicionar uma mensagem ou lógica para mostrar que os dados foram salvos
       alert('Alterações salvas com sucesso!');
     } else {
-      // Lidar com erros
       alert('Houve um erro ao salvar as alterações.');
     }
   };
 
-  // Fetch products when component mounts
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -95,7 +92,6 @@ const RestaurantDashboard: React.FC = () => {
     if (file) {
       setSelectedFile(file);
       
-      // Create a preview for the UI
       const reader = new FileReader();
       reader.onloadend = () => {
         setEditForm(prev => ({
@@ -113,7 +109,6 @@ const RestaurantDashboard: React.FC = () => {
       
       let imageUrl = editForm.image;
       
-      // Upload image if a new file was selected
       if (selectedFile) {
         const uploadResult = await uploadImage(selectedFile);
         imageUrl = uploadResult.imageUrl;
