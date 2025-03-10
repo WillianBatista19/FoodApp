@@ -1,0 +1,23 @@
+{
+    "dishes": [
+      {
+        "name": "Prato 1",
+        "price": "20",
+        "description": "Descrição do Prato 1",
+        "prepTime": "30 minutos",
+        "servings": "2",
+        "category": "Categoria 1",
+        "image": null
+      },
+      {
+        "name": "Prato 2",
+        "price": "30",
+        "description": "Descrição do Prato 2",
+        "prepTime": "40 minutos",
+        "servings": "3",
+        "category": "Categoria 2",
+        "image": null
+      }
+    ]
+  }
+  

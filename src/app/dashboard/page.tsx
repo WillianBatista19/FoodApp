@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Menu, Store, Clock, Pizza, Settings, PlusCircle, Edit, Trash2, X } from 'lucide-react';
-import { Product, EditFormData, fetchProducts, saveProduct, deleteProduct, uploadImage } from '../../../services/api';
+import { Product, EditFormData, fetchProducts, saveProduct, deleteProduct, uploadImage } from '../../../services/apiTest';
 
 const RestaurantDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'menu' | 'info' | 'settings'>('menu');
